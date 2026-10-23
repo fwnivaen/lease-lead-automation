@@ -1,11 +1,11 @@
 # Lease Lead Automation
 
-Collect public Facebook housing-group posts for a college lease-takeover broker. Apify scrapes the posts; Make.com is intended to classify them and write leads to Google Sheets.
+Collect public Facebook housing-group posts for a college lease-takeover broker. Apify scrapes the posts; Make.com filters posts and writes leads to Google Sheets, where formulas classify college and direction.
 
 ## Current setup
 
 ```text
-Apify saved task lease-leads-daily → Make.com webhook → classification → Lease Leads sheet
+Apify saved task lease-leads-daily → Make.com webhook → keyword filter / deduplication → Lease Leads sheet formulas
 ```
 
 - Actor: [apify/facebook-groups-scraper](https://apify.com/apify/facebook-groups-scraper).
@@ -15,6 +15,10 @@ Apify saved task lease-leads-daily → Make.com webhook → classification → L
 - Apify's HTTP integration receives terminal run events. Make must route successful runs to dataset processing and failures to error handling.
 
 This repository stores scraper input and maintenance checks. It does **not** deploy the schedule, webhook, Make scenario, classification rules, or Sheet mappings. Editing this repository does not update those services.
+
+## Live status (October 22, 2026)
+
+Apify scraping and webhook dispatch succeeded. Make is paused because its free credits are exhausted; the owner chose to wait for the displayed reset in eight days. The live Make scenario also has a 200-item dataset cap despite recent 226–276-item datasets. See the operations guide for credit-budget, deduplication, literal-text, and replay findings. The pipeline is **not yet verified end to end**.
 
 ## Check the repository
 

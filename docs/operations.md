@@ -30,3 +30,27 @@ Serialize the lookup/write path or use a durable store with uniqueness guarantee
 ## Configuration changes
 
 The live task is the observed baseline for this cleanup. To change group coverage, limits, or cadence, review cost and collection gaps, update Apify and this repository together, and verify the next scheduled run. Preserve the four-day window unless the schedule is changed deliberately. Keep real service identifiers and secrets in private operational records; commit only sanitized blueprints and synthetic fixtures.
+
+## Follow-up: signed-in Make inspection, October 22
+
+The user chose to wait for the credit reset rather than purchase credits. Make's dashboard reports approximately 1,252 / 1,000 credits used, -252 remaining, and a reset in eight days. It explicitly says scenarios are paused. The scenario is marked Active but that does not override the organization credit pause. No paid run, replay, purchase, or live configuration change was made.
+
+Observed scenario: **Integration Apify, Google Sheets**, ID `6463445`.
+
+- Latest history entry: October 15, successful, 401 credits; October 12 used 396 credits. The scenario shows two queued records and no currently active run. Queue contents have not been reconciled with the two later Apify runs.
+- Flow: Watch Task Runs → Google Sheets batchUpdate (duplicate weekly template) → Get Dataset Items → Real leads only filter → `lease_seen_posts` existence check → Add a Row → mark record in `lease_seen_posts`. A Resume error route is attached to weekly tab creation.
+- **Confirmed retrieval cap:** Get Dataset Items maps the event's `defaultDatasetId`, JSON/Clean, limit **200**, no offset. Recent datasets contain 226–276 items. The scenario has no visible pagination stage; posts beyond the cap are not passed through the lead filter. Add complete dataset retrieval/pagination with explicit bounds and count reconciliation before calling delivery complete; simply increasing the cap does not guarantee future completeness and increases credit use.
+- **Credit budget:** the two latest Make executions cost roughly 400 credits each. At eight runs per month that is approximately 3,200 credits, already above the observed 1,000-credit allowance. Reset alone will not make this cadence sustainable. Measure operations per unique lead, reduce redundant per-post operations, then choose a sustainable cadence or allowance with the owner.
+- **Deduplication:** both lookup and final record use an MD5 of a lowercased, punctuation-stripped prefix of post text (150 characters), not post identity. Distinct posts sharing that prefix can be suppressed, and edited posts can appear new. The Sheet also marks repeated post URLs or author names within the current tab as DUP; an author name is not unique post identity. Preserve the existing store during any migration; introduce a versioned stable post-ID/permalink key and explicitly reconcile old records before replaying.
+- **Concurrency/recovery:** Process data in order is No; Store incomplete executions is No. Lookup followed by append is therefore not a uniqueness guarantee under concurrent delivery. Configure and verify serialization plus recovery/reconciliation before replay tests. Do not clear the data store or queued events to make testing easier.
+- **Sheet mapping:** Add a Row targets the expected workbook and a dynamic `Week of YYYY-MM-DD` tab. Date, author, post text, permalink, group title, status, college/direction formulas, extracted phone/email formulas, and a DUP formula are mapped. Classification occurs in Sheet formulas after a broad Make keyword filter, so the old description of classification entirely inside Make was inaccurate.
+- **Untrusted text:** Add a Row uses User entered for the whole row, including direct author/text/title mappings. Those source strings can be interpreted as formulas. Preserve intended generated formulas while writing scraped strings as literal text, then test leading `=`, `+`, `-`, and `@` fixtures in a separate test destination.
+- **Delayed replay/week rollover:** both weekly tab creation and row insertion calculate the week from `now`. Queued historical runs will be placed in the processing week's tab. Decide whether grouping should follow post date, run date, or processing date before replay; derive both steps from the same chosen timestamp.
+- **Filters:** a positive housing-keyword regex plus two exclusion regexes runs before deduplication. Direction and college remain heuristic formulas. Changes need synthetic acceptance cases and owner review, especially where exclusions could remove valid leads.
+
+### Before resuming after the reset
+
+1. Resolve the 200-item cap, sustainable credit budget, source-text handling, and replay-safe deduplication/recovery in a testable scenario copy.
+2. Reconcile queued event IDs with Apify datasets before allowing automatic backlog processing. Preserve original data and state; verify retention before planning a delayed replay.
+3. Test pagination boundaries, repeated events, concurrent deliveries, interrupted Sheet writes, and weekly rollover using synthetic inputs. Compare actual counts with expected writes/skips/duplicates.
+4. Only then resume/replay production events and verify the resulting Sheet rows. Until these steps pass, the pipeline is not end-to-end verified.
