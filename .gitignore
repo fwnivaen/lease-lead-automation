@@ -1,3 +1,10 @@
 .env
+.env.*
+!.env.example
 *.csv
+*.xlsx
 leads/
+exports/
+__pycache__/
+*.py[cod]
+.DS_Store

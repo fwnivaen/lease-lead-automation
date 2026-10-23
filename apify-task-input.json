@@ -1,20 +1,40 @@
 {
   "onlyPostsNewerThan": "4 days",
-  "resultsLimit": 30,
+  "resultsLimit": 25,
   "viewOption": "CHRONOLOGICAL",
   "startUrls": [
-    {"url": "https://www.facebook.com/groups/penn.state.off.campus.housing.psu.rentals/"},
-    {"url": "https://www.facebook.com/groups/penn.state.rentals.state.college.rentals/"},
-    {"url": "https://www.facebook.com/groups/513800124157120/"},
-    {"url": "https://www.facebook.com/groups/apartments.tamu/"},
-    {"url": "https://www.facebook.com/groups/1021697513232561/"},
-    {"url": "https://www.facebook.com/groups/223351171575348/"},
-    {"url": "https://www.facebook.com/groups/1934073980023334/"},
-    {"url": "https://www.facebook.com/groups/universityofgeorgiaugaoffcampushousingroommates/"},
-    {"url": "https://www.facebook.com/groups/usf.apartments/"},
-    {"url": "https://www.facebook.com/groups/apartments.ut/"},
-    {"url": "https://www.facebook.com/groups/1072093874109630/"},
-    {"url": "https://www.facebook.com/groups/utaustinhousingroommates/"},
-    {"url": "https://www.facebook.com/groups/apartments.utd/"}
+    {
+      "url": "https://www.facebook.com/groups/penn.state.off.campus.housing.psu.rentals/"
+    },
+    {
+      "url": "https://www.facebook.com/groups/apartments.tamu/"
+    },
+    {
+      "url": "https://www.facebook.com/groups/1021697513232561/"
+    },
+    {
+      "url": "https://www.facebook.com/groups/223351171575348/"
+    },
+    {
+      "url": "https://www.facebook.com/groups/1934073980023334/"
+    },
+    {
+      "url": "https://www.facebook.com/groups/universityofgeorgiaugaoffcampushousingroommates/"
+    },
+    {
+      "url": "https://www.facebook.com/groups/usf.apartments/"
+    },
+    {
+      "url": "https://www.facebook.com/groups/apartments.ut/"
+    },
+    {
+      "url": "https://www.facebook.com/groups/1072093874109630/"
+    },
+    {
+      "url": "https://www.facebook.com/groups/utaustinhousingroommates/"
+    },
+    {
+      "url": "https://www.facebook.com/groups/apartments.utd/"
+    }
   ]
 }
