@@ -14,3 +14,14 @@ jobs:
           python-version: '3.12'
       - run: python scripts/validate_config.py
       - run: python -m unittest discover -s tests -v
+      - name: Validate preserved housing example
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from scripts.validate_config import validate
+          errors = validate(json.loads(Path("examples/housing-apify-task-input.json").read_text()))
+          if errors:
+              raise SystemExit("\n".join(errors))
+          print("PASS: preserved housing example is structurally valid.")
+          PY

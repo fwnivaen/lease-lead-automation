@@ -19,7 +19,7 @@ def validate(config):
     if type(limit) is not int or limit < 1:
         errors.append("resultsLimit must be a positive integer to bound usage")
     if config.get("viewOption") != "CHRONOLOGICAL":
-        errors.append("daily collection requires CHRONOLOGICAL sorting")
+        errors.append("rolling collection requires CHRONOLOGICAL sorting")
     # This project's rolling lookback policy is deliberately narrower than the actor schema.
     lookback = config.get("onlyPostsNewerThan")
     if not isinstance(lookback, str) or not re.fullmatch(r"[1-9][0-9]* days?", lookback):

@@ -1,4 +1,8 @@
-# Operations and audit
+# Facebook Lead Automation: operations and audit
+
+The collection and delivery checks here apply to any lead campaign built with the Facebook Groups Scraper → Make.com → Google Sheets workflow. Use the [campaign guide](customization.md) for new groups, qualification rules, and Sheet fields.
+
+The dated audit sections record the **original housing deployment**. Names such as `lease-leads-daily`, `lease_seen_posts`, and "Lease Leads", plus college/direction formulas and the Monday/Thursday schedule, describe that historical setup. They are not requirements for a new campaign. This repository's generalization does not rename live resources, change schedules, repair the audited service gaps, or verify a new end-to-end run. The main input is now a generic template; the original 11-group config is preserved in [`examples/housing-apify-task-input.json`](../examples/housing-apify-task-input.json).
 
 ## Audit: October 22, 2026
 
@@ -16,7 +20,7 @@ Verified through the signed-in Apify console:
 
 1. Sign in to Make and inspect the scenario receiving the existing Apify integration. Confirm it is active and find the execution corresponding to the latest run ID above.
 2. On a successful event, fetch the dataset belonging to that event's run. Follow pagination until all items have been read; do not assume a single response contains the entire dataset. Failure/abort/timeout events must not enter the lead-write route.
-3. Verify required source fields before classification. Keep unknown college or ambiguous intent for review rather than inventing values. Check synthetic examples for lease in, lease out, irrelevant posts, and ambiguous posts against the actual classifier.
+3. Verify required source fields before qualification. Define the campaign's signals, exclusions, categories, and optional fields. Keep unknown attributes or ambiguous intent for review rather than inventing values. Check synthetic qualified, irrelevant, ambiguous, and exclusion-conflict posts against the actual rules. For housing, college and lease direction are optional niche-specific attributes.
 4. Verify the target workbook, current weekly tab, column mapping, permissions, and error handling. Write untrusted post text as plain text, not executable formulas. Reconcile dataset items with skipped, duplicate, rejected, failed, and written counts.
 5. Prove replay safety with synthetic fixtures in a test destination: processing the same event twice and the same post from a second run must not add duplicate leads. Test week rollover as well.
 6. Inspect failed executions and retry behavior before replaying production data. Record the final counts and successful Sheet delivery without committing personal data.
@@ -29,7 +33,7 @@ Serialize the lookup/write path or use a durable store with uniqueness guarantee
 
 ## Configuration changes
 
-The live task is the observed baseline for this cleanup. To change group coverage, limits, or cadence, review cost and collection gaps, update Apify and this repository together, and verify the next scheduled run. Preserve the four-day window unless the schedule is changed deliberately. Keep real service identifiers and secrets in private operational records; commit only sanitized blueprints and synthetic fixtures.
+The original deployment used a four-day lookback for its Monday/Thursday cadence. A new campaign can choose different group coverage, limits, and cadence; size the lookback to cover the longest collection gap and plan for overlap. Review cost, update the live task and your chosen config together, and verify the next scheduled run. A GitHub push alone does not deploy changes. Preserve existing schedules and state during migration. Keep real service identifiers and secrets in private operational records; commit only sanitized blueprints and synthetic fixtures.
 
 ## Follow-up: signed-in Make inspection, October 22
 
